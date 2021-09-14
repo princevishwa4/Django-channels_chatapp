@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="col mt-5 justify-content-center">
+            <div class="container bcontent">
+                <h2>Profile Details</h2>
+                <hr />
+                <div class="card mt-5" style="width: 1000px;">
+                    <div class="d-flex justify-content-between">
+                        <figure class="col-sm-4 pt-3">
+                            <img class="card-img" src="{% static 'images/dummy_image.png' %}" alt="dummy_image.png">
+                        </figure>
+                        <div class="col-sm-8">
+                            <div class="card-body">
+                                <h3 class="card-title">Username :- {{user.username}}</h3>
+                                {% if user.first_name != '' and user.last_name != '' %}
+                                <p class="card-text"><strong>Name :- </strong>{{user.first_name}} {{user.last_name}}</p>  
+                                {% endif %}
+                                <p class="card-text"><strong>Email :- </strong>{{user.email}}</p>
+                                <div class="form-group">
+                                    <label><strong>Enter Room Name :- </strong></label>
+                                    <input id="room-name-input" class="form-control" type="text" size="100">
+                                </div>
+                                <div style="text-align: right;">
+                                    <button type="submit" class="btn btn-primary mt-5" id="room-name-submit">Start Chat</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('#room-name-input').focus();
+        document.querySelector('#room-name-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {
+                document.querySelector('#room-name-submit').click();
+            }
+        };
+    
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            var roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = roomName + '/';
+        };
+    </script>    
+{% endblock content %}
