@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -17,5 +18,13 @@ def home(request):
 
 
 def room(request, room_name, *args, **kwargs):
-    messages = Message.objects.filter(room=room_name)
-    return render(request, "chat/room.html", {'room_name': room_name, 'username': request.user.username, 'messages': messages})
+    roomname = ""
+    room_names = Room.objects.all()
+    if room_name.isdigit():
+        for name in room_names:
+            if name.id == int(room_name):
+                roomname = name.name
+    else:
+        roomname = room_name
+    messages = Message.objects.filter(room=roomname)
+    return render(request, "chat/room.html", {'room_name': roomname, 'username': request.user.username, 'messages': messages})
