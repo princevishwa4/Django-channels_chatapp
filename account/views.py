@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-from account.forms import LoginForm, RegisterForm
+from account.forms import LoginForm, RegisterForm, UpdateForm
 
 
 def login_view(request):
@@ -47,4 +48,22 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("login")    
+    return redirect("login")
+
+
+def update_view(request, id):
+    context = {}
+
+    if request.method == 'POST':
+        user = User.objects.get(id=id)
+        form = UpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            messages.success(request, "Profile Updated Successfully.")
+            form.save()
+            return redirect("chat:home")
+    else:
+        user = User.objects.get(id=id)
+        form = UpdateForm(instance=user)
+
+    context['form'] = form
+    return render(request, 'account/update.html', context)       

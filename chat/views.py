@@ -24,7 +24,11 @@ def room(request, room_name, *args, **kwargs):
         for name in room_names:
             if name.id == int(room_name):
                 roomname = name.name
+
     else:
         roomname = room_name
+        if not Room.objects.filter(name=roomname).exists():
+            room = Room(name=roomname)
+            room.save()
     messages = Message.objects.filter(room=roomname)
     return render(request, "chat/room.html", {'room_name': roomname, 'username': request.user.username, 'messages': messages})

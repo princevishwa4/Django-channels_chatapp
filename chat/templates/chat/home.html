@@ -3,6 +3,17 @@
 
 {% block content %}
     <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible fade show mb-5" {% endif %}>
+                    <strong style="text-transform: capitalize">{{message.tags}}!</strong>
+                    <span>{{message}}</span>
+                    <button type="button" class="close" data-dismiss="alert" arial-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %} 
         <div class="col mt-5 justify-content-center">
             <div class="container bcontent">
                 <h2>Profile Details</h2>
@@ -27,6 +38,7 @@
                                     <input id="room-name-input" class="form-control" type="text" size="100">
                                 </div>
                                 <div style="text-align: right;">
+                                    <a class="btn btn-success mt-5" href="{% url 'update' request.user.id %}">Edit Profile</a>
                                     <button type="submit" class="btn btn-primary mt-5" id="room-name-submit">Start Chat</button>
                                 </div>
                             </div>
@@ -43,6 +55,9 @@
             var customRoomName = document.querySelector('#room-name-input').value;
 
             if (roomName !== '' && customRoomName !== ''){
+                alert("Please either select the available room or create one room")
+                location.reload();
+            }else if(roomName == '' && customRoomName == ''){
                 alert("Please either select the available room or create one room")
                 location.reload();
             }else if(roomName !== '' && customRoomName === ''){
